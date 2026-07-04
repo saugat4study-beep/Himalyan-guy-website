@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Himalayan Guy — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ridge-white:#F6F3EC;
+    --pine:#1C3A2E;
+    --pine-deep:#122720;
+    --panel:#0F211B;
+    --glacier:#4C7D93;
+    --clay:#C07F4E;
+    --flag-red:#A23E3F;
+    --ink:#211F1A;
+    --line:rgba(28,58,46,0.14);
+    --font-display:'Fraunces', serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:var(--font-body);background:var(--ridge-white);color:var(--ink);}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+  input,textarea,select{font-family:inherit;}
+
+  /* ---------- LOGIN ---------- */
+  #login-screen{
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 30% 20%, #22453a, #0F211B 70%);
+  }
+  .login-card{
+    background:var(--ridge-white);width:380px;padding:44px 38px;border-radius:4px;
+    box-shadow:0 30px 60px rgba(0,0,0,0.35);
+  }
+  .login-logo{font-family:var(--font-display);font-weight:600;font-size:22px;color:var(--pine);margin-bottom:4px;}
+  .login-logo span{color:var(--clay);}
+  .login-sub{font-family:var(--font-mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#8a8776;margin-bottom:30px;}
+  .field{margin-bottom:18px;}
+  .field label{display:block;font-size:12.5px;font-weight:500;margin-bottom:7px;color:#4B4A42;}
+  .field input{
+    width:100%;padding:11px 13px;border:1px solid #D8D3C4;border-radius:3px;font-size:14px;background:#fff;
+  }
+  .field input:focus{outline:none;border-color:var(--pine);}
+  .login-btn{
+    width:100%;background:var(--pine-deep);color:var(--ridge-white);border:none;padding:13px;
+    border-radius:3px;font-size:13.5px;font-weight:500;margin-top:8px;transition:background 0.2s;
+  }
+  .login-btn:hover{background:#0a1a15;}
+  .login-hint{font-family:var(--font-mono);font-size:11px;color:#9a9686;margin-top:16px;text-align:center;}
+
+  /* ---------- SHELL ---------- */
+  #app{display:none;min-height:100vh;grid-template-columns:220px 1fr;}
+  #app.active{display:grid;}
+  .sidebar{background:var(--panel);color:#B7C6BE;padding:24px 16px;display:flex;flex-direction:column;}
+  .side-logo{font-family:var(--font-display);font-weight:600;font-size:17px;color:#fff;padding:8px 10px 26px;}
+  .side-logo span{color:var(--clay);}
+  .side-nav a{
+    display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:4px;font-size:13.5px;
+    margin-bottom:2px;transition:background 0.15s;color:#B7C6BE;
+  }
+  .side-nav a:hover{background:rgba(255,255,255,0.06);}
+  .side-nav a.active{background:var(--pine);color:#fff;}
+  .side-nav .grp{font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#5f7168;margin:18px 12px 8px;}
+  .side-foot{margin-top:auto;padding:12px 10px;font-size:12px;color:#5f7168;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;}
+  .side-foot a{color:#B7C6BE;}
+
+  .main{padding:32px 40px;overflow-y:auto;max-height:100vh;}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;}
+  .topbar h1{font-family:var(--font-display);font-weight:600;font-size:26px;color:var(--pine-deep);}
+  .btn{
+    font-size:13px;font-weight:500;padding:10px 18px;border-radius:3px;border:none;transition:opacity 0.2s;
+  }
+  .btn:hover{opacity:0.9;}
+  .btn-primary{background:var(--pine-deep);color:#fff;}
+  .btn-outline{background:transparent;border:1px solid #D8D3C4;color:var(--ink);}
+  .btn-clay{background:var(--clay);color:#fff;}
+
+  .view{display:none;}
+  .view.active{display:block;}
+
+  /* stat cards */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;}
+  .stat-card{background:#fff;border:1px solid var(--line);border-radius:4px;padding:20px;}
+  .stat-card .label{font-family:var(--font-mono);font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:#8a8776;margin-bottom:8px;}
+  .stat-card .val{font-family:var(--font-display);font-size:28px;font-weight:600;color:var(--pine-deep);}
+  .stat-card .delta{font-size:11.5px;color:#4C7D93;margin-top:4px;}
+
+  /* table */
+  .panel{background:#fff;border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+  table{width:100%;border-collapse:collapse;}
+  th{
+    text-align:left;font-family:var(--font-mono);font-size:10.5px;letter-spacing:1px;text-transform:uppercase;
+    color:#8a8776;padding:14px 20px;border-bottom:1px solid var(--line);background:#FBF9F4;
+  }
+  td{padding:16px 20px;border-bottom:1px solid var(--line);font-size:13.5px;}
+  tr:last-child td{border-bottom:none;}
+  .post-title{font-weight:500;color:var(--pine-deep);}
+  .badge{font-family:var(--font-mono);font-size:10.5px;padding:4px 9px;border-radius:20px;letter-spacing:0.3px;}
+  .badge-published{background:#DEEAE2;color:var(--pine);}
+  .badge-draft{background:#EFE7D8;color:var(--clay);}
+  .badge-scheduled{background:#DCE7EE;color:var(--glacier);}
+  .row-actions{display:flex;gap:14px;font-family:var(--font-mono);font-size:11.5px;}
+  .row-actions a{color:var(--glacier);}
+  .row-actions a.danger{color:var(--flag-red);}
+
+  /* editor */
+  .editor-grid{display:grid;grid-template-columns:1fr 300px;gap:24px;}
+  .field-block{margin-bottom:20px;}
+  .field-block label{display:block;font-size:12.5px;font-weight:500;margin-bottom:8px;color:#4B4A42;}
+  .title-input{
+    width:100%;font-family:var(--font-display);font-size:26px;font-weight:600;border:none;border-bottom:1px solid var(--line);
+    padding:8px 2px 14px;background:transparent;color:var(--pine-deep);
+  }
+  .title-input:focus{outline:none;border-color:var(--pine);}
+  .toolbar{display:flex;gap:4px;background:#FBF9F4;border:1px solid var(--line);border-radius:4px 4px 0 0;padding:8px;}
+  .toolbar button{
+    width:32px;height:32px;border:none;background:transparent;border-radius:3px;font-size:13px;color:var(--ink);
+  }
+  .toolbar button:hover{background:#EDE8DA;}
+  .editor-body{
+    min-height:280px;border:1px solid var(--line);border-top:none;border-radius:0 0 4px 4px;padding:18px;
+    font-size:14.5px;line-height:1.7;background:#fff;color:#333;
+  }
+  .editor-body:focus{outline:none;}
+  .sidebar-card{background:#fff;border:1px solid var(--line);border-radius:4px;padding:18px;margin-bottom:16px;}
+  .sidebar-card h4{font-family:var(--font-mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#8a8776;margin-bottom:14px;}
+  .upload-box{
+    border:1.5px dashed #D8D3C4;border-radius:4px;padding:26px 14px;text-align:center;font-size:12.5px;color:#8a8776;margin-bottom:10px;
+  }
+  .tag-input{width:100%;padding:9px 11px;border:1px solid #D8D3C4;border-radius:3px;font-size:13px;margin-top:6px;}
+  .chip{display:inline-block;background:#EDE8DA;padding:4px 10px;border-radius:20px;font-size:11.5px;margin:4px 4px 0 0;}
+  select.tag-input{background:#fff;}
+
+  /* comments/newsletter/messages lists */
+  .list-item{padding:18px 20px;border-bottom:1px solid var(--line);}
+  .list-item:last-child{border-bottom:none;}
+  .list-item .meta{font-family:var(--font-mono);font-size:11px;color:#8a8776;margin-bottom:6px;}
+  .list-item .body-text{font-size:13.5px;color:#333;margin-bottom:10px;}
+  .list-actions{display:flex;gap:16px;font-family:var(--font-mono);font-size:11px;}
+  .list-actions a{color:var(--glacier);}
+  .list-actions a.danger{color:var(--flag-red);}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">The Himalayan <span>Guy</span></div>
+    <div class="login-sub">Admin Dashboard</div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="login-email" value="saugat4study@gmail.com">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="••••••••">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Log in</button>
+    <div class="login-hint">Mockup only — click Log in with any password to preview</div>
+    <div class="login-hint"><a href="index.html" style="text-decoration:underline;color:#4B4A42;">← Back to site</a></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="sidebar">
+    <div class="side-logo">Himalayan <span>Guy</span></div>
+    <div class="side-nav">
+      <div class="grp">Content</div>
+      <a href="#" class="active" onclick="showView(event,'dashboard')">📊 Dashboard</a>
+      <a href="#" onclick="showView(event,'posts')">📝 Posts</a>
+      <a href="#" onclick="showView(event,'editor')">➕ New Post</a>
+      <a href="#" onclick="showView(event,'gallery')">🖼 Gallery</a>
+      <a href="#" onclick="showView(event,'categories')">🏷 Categories &amp; Tags</a>
+      <div class="grp">Engagement</div>
+      <a href="#" onclick="showView(event,'comments')">💬 Comments</a>
+      <a href="#" onclick="showView(event,'newsletter')">✉️ Newsletter</a>
+      <a href="#" onclick="showView(event,'messages')">📩 Messages</a>
+      <div class="grp">System</div>
+      <a href="#" onclick="showView(event,'settings')">⚙️ Settings</a>
+    </div>
+    <div class="side-foot">
+      Logged in as<br><a href="#">saugat4study@gmail.com</a><br><br>
+      <a href="index.html">↗ View site</a>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div class="view active" id="view-dashboard">
+      <div class="topbar">
+        <h1>Dashboard</h1>
+        <button class="btn btn-primary" onclick="showView(null,'editor')">+ New Post</button>
+      </div>
+      <div class="stats">
+        <div class="stat-card"><div class="label">Published Posts</div><div class="val">42</div><div class="delta">+3 this month</div></div>
+        <div class="stat-card"><div class="label">Total Views</div><div class="val">18.4k</div><div class="delta">+12% vs last month</div></div>
+        <div class="stat-card"><div class="label">Newsletter Subs</div><div class="val">1,203</div><div class="delta">+58 this month</div></div>
+        <div class="stat-card"><div class="label">Pending Comments</div><div class="val">7</div><div class="delta">Needs review</div></div>
+      </div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Recent Post</th><th>Status</th><th>Views</th><th>Published</th></tr></thead>
+          <tbody>
+            <tr><td class="post-title">Sunrise at Gokyo Ri</td><td><span class="badge badge-published">Published</span></td><td>2,140</td><td>Jun 18, 2026</td></tr>
+            <tr><td class="post-title">Poon Hill without the crowds</td><td><span class="badge badge-published">Published</span></td><td>1,320</td><td>Jun 4, 2026</td></tr>
+            <tr><td class="post-title">Packing for the monsoon trails</td><td><span class="badge badge-draft">Draft</span></td><td>—</td><td>—</td></tr>
+            <tr><td class="post-title">Langtang, one year after</td><td><span class="badge badge-scheduled">Scheduled</span></td><td>—</td><td>Jul 5, 2026</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- POSTS -->
+    <div class="view" id="view-posts">
+      <div class="topbar">
+        <h1>All Posts</h1>
+        <button class="btn btn-primary" onclick="showView(null,'editor')">+ New Post</button>
+      </div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Date</th><th></th></tr></thead>
+          <tbody>
+            <tr><td class="post-title">Sunrise at Gokyo Ri</td><td>Trekking</td><td><span class="badge badge-published">Published</span></td><td>Jun 18, 2026</td><td class="row-actions"><a onclick="showView(null,'editor')">Edit</a><a>Preview</a><a class="danger">Delete</a></td></tr>
+            <tr><td class="post-title">Poon Hill without the crowds</td><td>Trekking</td><td><span class="badge badge-published">Published</span></td><td>Jun 4, 2026</td><td class="row-actions"><a onclick="showView(null,'editor')">Edit</a><a>Preview</a><a class="danger">Delete</a></td></tr>
+            <tr><td class="post-title">The last kingdom: Upper Mustang</td><td>Culture</td><td><span class="badge badge-published">Published</span></td><td>May 22, 2026</td><td class="row-actions"><a onclick="showView(null,'editor')">Edit</a><a>Preview</a><a class="danger">Delete</a></td></tr>
+            <tr><td class="post-title">Packing for the monsoon trails</td><td>Gear</td><td><span class="badge badge-draft">Draft</span></td><td>—</td><td class="row-actions"><a onclick="showView(null,'editor')">Edit</a><a>Preview</a><a class="danger">Delete</a></td></tr>
+            <tr><td class="post-title">Langtang, one year after</td><td>Community</td><td><span class="badge badge-scheduled">Scheduled — Jul 5</span></td><td>—</td><td class="row-actions"><a onclick="showView(null,'editor')">Edit</a><a>Preview</a><a class="danger">Delete</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- EDITOR -->
+    <div class="view" id="view-editor">
+      <div class="topbar">
+        <h1>New Post</h1>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-outline">Save Draft</button>
+          <button class="btn btn-outline">Preview</button>
+          <button class="btn btn-primary">Publish</button>
+        </div>
+      </div>
+      <div class="editor-grid">
+        <div>
+          <div class="field-block">
+            <input class="title-input" placeholder="Post title…" value="Crossing Thorong La at 5,416m">
+          </div>
+          <div class="field-block">
+            <label>Content</label>
+            <div class="toolbar">
+              <button><b>B</b></button><button><i>I</i></button><button><u>U</u></button>
+              <button>H1</button><button>H2</button><button>” ”</button>
+              <button>🔗</button><button>🖼</button><button>▶</button><button>• List</button>
+            </div>
+            <div class="editor-body" contenteditable="true">
+              We left Manang before sunrise. The trail to Thorong La climbs almost 1,600 meters over eight kilometers, and by the time the pass appears, the air feels thin enough to chew...
+              <br><br>[Embedded photo gallery and YouTube video would appear here]
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="sidebar-card">
+            <h4>Featured Image</h4>
+            <div class="upload-box">Drop image or click to upload</div>
+          </div>
+          <div class="sidebar-card">
+            <h4>Category</h4>
+            <select class="tag-input">
+              <option>Trekking</option><option>Culture</option><option>Villages</option><option>Wildlife</option><option>Gear</option>
+            </select>
+          </div>
+          <div class="sidebar-card">
+            <h4>Tags</h4>
+            <input class="tag-input" placeholder="Add tag and press enter">
+            <div><span class="chip">Annapurna</span><span class="chip">High altitude</span><span class="chip">Circuit</span></div>
+          </div>
+          <div class="sidebar-card">
+            <h4>Publish Settings</h4>
+            <label style="font-size:12.5px;display:block;margin-bottom:6px;">Publish date</label>
+            <input type="date" class="tag-input" value="2026-07-05">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="view" id="view-gallery">
+      <div class="topbar"><h1>Gallery</h1><button class="btn btn-primary">+ Upload Images</button></div>
+      <div class="panel" style="padding:40px;text-align:center;color:#8a8776;font-size:13.5px;">
+        Manage photos by category (Mountains, Lakes, Trekking, Villages, Wildlife, Culture). Drag to reorder, click to feature on the homepage gallery preview.
+      </div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="view" id="view-categories">
+      <div class="topbar"><h1>Categories &amp; Tags</h1><button class="btn btn-primary">+ New Category</button></div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Name</th><th>Posts</th><th></th></tr></thead>
+          <tbody>
+            <tr><td class="post-title">Trekking</td><td>24</td><td class="row-actions"><a>Edit</a><a class="danger">Delete</a></td></tr>
+            <tr><td class="post-title">Culture</td><td>9</td><td class="row-actions"><a>Edit</a><a class="danger">Delete</a></td></tr>
+            <tr><td class="post-title">Villages</td><td>6</td><td class="row-actions"><a>Edit</a><a class="danger">Delete</a></td></tr>
+            <tr><td class="post-title">Wildlife</td><td>3</td><td class="row-actions"><a>Edit</a><a class="danger">Delete</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- COMMENTS -->
+    <div class="view" id="view-comments">
+      <div class="topbar"><h1>Comments</h1></div>
+      <div class="panel">
+        <div class="list-item">
+          <div class="meta">Nima D. · on "Sunrise at Gokyo Ri" · Jun 30, 2026, 9:14 AM</div>
+          <div class="body-text">This is exactly the route I'm planning for October — thank you for the detail on acclimatization days!</div>
+          <div class="list-actions"><a>Approve</a><a>Reply</a><a class="danger">Delete</a></div>
+        </div>
+        <div class="list-item">
+          <div class="meta">Priya S. · on "Poon Hill without the crowds" · Jun 28, 2026, 4:02 PM</div>
+          <div class="body-text">Did you need a guide for this alternate route or is it well marked?</div>
+          <div class="list-actions"><a>Approve</a><a>Reply</a><a class="danger">Delete</a></div>
+        </div>
+        <div class="list-item">
+          <div class="meta">Anonymous · on "The last kingdom: Upper Mustang" · Jun 25, 2026, 11:47 AM</div>
+          <div class="body-text">Flagged by spam filter — pending review.</div>
+          <div class="list-actions"><a>Approve</a><a>Reply</a><a class="danger">Delete</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEWSLETTER -->
+    <div class="view" id="view-newsletter">
+      <div class="topbar"><h1>Newsletter Subscribers</h1><button class="btn btn-outline">Export CSV</button></div>
+      <div class="stats" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stat-card"><div class="label">Total Subscribers</div><div class="val">1,203</div></div>
+        <div class="stat-card"><div class="label">New This Month</div><div class="val">58</div></div>
+        <div class="stat-card"><div class="label">Unsubscribed</div><div class="val">4</div></div>
+      </div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Email</th><th>Subscribed</th></tr></thead>
+          <tbody>
+            <tr><td>trekker.nima@example.com</td><td>Jun 29, 2026</td></tr>
+            <tr><td>priya.travels@example.com</td><td>Jun 27, 2026</td></tr>
+            <tr><td>mountains.always@example.com</td><td>Jun 21, 2026</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="view" id="view-messages">
+      <div class="topbar"><h1>Contact Messages</h1></div>
+      <div class="panel">
+        <div class="list-item">
+          <div class="meta">Ravi Thapa · ravi.t@example.com · Subject: Guiding inquiry · Jun 30, 2026</div>
+          <div class="body-text">Hi, I'm planning an Annapurna trip in October and wondered if you take on guiding work or could recommend someone...</div>
+          <div class="list-actions"><a>Reply by email</a><a class="danger">Delete</a></div>
+        </div>
+        <div class="list-item">
+          <div class="meta">Local Trek Gear Co. · partnerships@trekgear.com · Subject: Collaboration · Jun 26, 2026</div>
+          <div class="body-text">We love your content and would like to discuss a potential gear review partnership...</div>
+          <div class="list-actions"><a>Reply by email</a><a class="danger">Delete</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="view" id="view-settings">
+      <div class="topbar"><h1>Settings</h1></div>
+      <div class="sidebar-card" style="max-width:480px;">
+        <h4>Account</h4>
+        <div class="field-block"><label>Admin email</label><input class="tag-input" value="saugat4study@gmail.com"></div>
+        <div class="field-block"><label>New password</label><input class="tag-input" type="password" placeholder="••••••••"></div>
+        <button class="btn btn-primary">Save Changes</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function doLogin(){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').classList.add('active');
+  }
+  function showView(e, name){
+    if(e) e.preventDefault();
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-'+name).classList.add('active');
+    document.querySelectorAll('.side-nav a').forEach(a=>a.classList.remove('active'));
+    if(e && e.target) e.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

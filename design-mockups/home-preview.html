@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Himalayan Guy — Exploring Nepal One Trail at a Time</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ridge-white:#F6F3EC;
+    --pine:#1C3A2E;
+    --pine-deep:#122720;
+    --glacier:#4C7D93;
+    --clay:#C07F4E;
+    --flag-red:#A23E3F;
+    --ink:#211F1A;
+    --line:rgba(28,58,46,0.14);
+    --font-display:'Fraunces', serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ridge-white);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+
+  /* NAV */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(246,243,236,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .navbar{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;max-width:1180px;margin:0 auto;}
+  .logo{font-family:var(--font-display);font-weight:600;font-size:22px;letter-spacing:0.2px;color:var(--pine);}
+  .logo span{color:var(--clay);}
+  .nav-links{display:flex;gap:36px;font-size:14px;font-weight:500;letter-spacing:0.3px;}
+  .nav-links a{opacity:0.75;transition:opacity 0.2s;}
+  .nav-links a:hover{opacity:1;}
+  .nav-cta{
+    font-family:var(--font-mono);font-size:12px;letter-spacing:0.5px;
+    border:1px solid var(--pine);color:var(--pine);padding:9px 18px;border-radius:2px;
+    transition:all 0.25s;
+  }
+  .nav-cta:hover{background:var(--pine);color:var(--ridge-white);}
+  .nav-toggle{display:none;}
+
+  /* HERO */
+  .hero{
+    position:relative;
+    height:92vh;min-height:620px;
+    display:flex;align-items:flex-end;
+    overflow:hidden;
+    background:linear-gradient(180deg,#2c5246 0%, #1c3a2e 45%, #122720 100%);
+  }
+  .hero-ridges{position:absolute;inset:0;width:100%;height:100%;opacity:0.9;}
+  .hero-vignette{position:absolute;inset:0;background:linear-gradient(180deg, rgba(18,39,32,0.05) 0%, rgba(18,39,32,0.75) 100%);}
+  .hero-content{position:relative;z-index:2;padding:0 32px 72px;max-width:1180px;margin:0 auto;width:100%;color:var(--ridge-white);}
+  .hero-eyebrow{
+    font-family:var(--font-mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;
+    color:#CFE0D6;opacity:0.85;margin-bottom:22px;display:flex;align-items:center;gap:10px;
+  }
+  .hero-eyebrow::before{content:'';width:22px;height:1px;background:#CFE0D6;opacity:0.6;}
+  .hero h1{
+    font-family:var(--font-display);font-weight:600;
+    font-size:clamp(46px, 8vw, 96px);
+    line-height:0.98;letter-spacing:-1px;
+    max-width:900px;
+  }
+  .hero h1 em{font-style:italic;font-weight:500;color:#E4C79A;}
+  .hero-tagline{
+    font-family:var(--font-body);font-size:18px;font-weight:400;
+    color:#DCE7DF;opacity:0.9;margin-top:24px;max-width:460px;
+  }
+  .hero-scroll{
+    position:absolute;bottom:28px;right:32px;z-index:2;
+    font-family:var(--font-mono);font-size:11px;color:#CFE0D6;
+    display:flex;align-items:center;gap:10px;letter-spacing:1px;
+    opacity:0.75;
+  }
+  .hero-scroll::after{content:'';width:1px;height:34px;background:#CFE0D6;animation:scrolldrop 2.2s ease-in-out infinite;}
+  @keyframes scrolldrop{0%{opacity:0.9;transform:scaleY(0.3);transform-origin:top;}50%{opacity:0.4;transform:scaleY(1);transform-origin:top;}100%{opacity:0.9;transform:scaleY(0.3);transform-origin:top;}}
+
+  /* SECTION LABELS */
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:44px;flex-wrap:wrap;gap:14px;}
+  .section-eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--clay);margin-bottom:10px;}
+  .section-head h2{font-family:var(--font-display);font-weight:500;font-size:clamp(28px,3.4vw,40px);color:var(--pine-deep);letter-spacing:-0.5px;}
+  .section-link{font-family:var(--font-mono);font-size:13px;color:var(--pine);border-bottom:1px solid var(--pine);padding-bottom:2px;}
+
+  section{padding:96px 0;}
+  .divider{height:1px;background:var(--line);}
+
+  /* FEATURED POSTS */
+  .post-grid{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:28px;}
+  .post-card{position:relative;display:flex;flex-direction:column;}
+  .post-card:first-child{grid-row:span 2;}
+  .post-media{
+    position:relative;border-radius:3px;overflow:hidden;aspect-ratio:4/5;margin-bottom:18px;
+    background:linear-gradient(160deg,var(--glacier),var(--pine));
+  }
+  .post-card:not(:first-child) .post-media{aspect-ratio:16/11;}
+  .post-media svg{width:100%;height:100%;}
+  .altitude-tag{
+    position:absolute;top:16px;left:16px;
+    font-family:var(--font-mono);font-size:11px;letter-spacing:0.5px;color:var(--ridge-white);
+    background:rgba(18,39,32,0.55);backdrop-filter:blur(4px);
+    padding:5px 10px;border-radius:2px;
+  }
+  .post-cat{font-family:var(--font-mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--clay);margin-bottom:8px;}
+  .post-card h3{font-family:var(--font-display);font-weight:500;font-size:23px;line-height:1.22;color:var(--pine-deep);margin-bottom:10px;}
+  .post-card:first-child h3{font-size:30px;}
+  .post-excerpt{font-size:14.5px;color:#4B4A42;opacity:0.85;margin-bottom:14px;flex-grow:1;}
+  .post-meta{font-family:var(--font-mono);font-size:11.5px;color:#6B6A60;display:flex;gap:14px;letter-spacing:0.3px;}
+
+  /* RECENT STRIP */
+  .recent-strip{background:var(--pine-deep);color:var(--ridge-white);}
+  .recent-strip .section-eyebrow{color:#E4C79A;}
+  .recent-strip .section-head h2{color:var(--ridge-white);}
+  .recent-strip .section-link{color:#CFE0D6;border-color:#CFE0D6;}
+  .recent-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;}
+  .recent-item{background:var(--pine-deep);padding:26px 22px;transition:background 0.25s;}
+  .recent-item:hover{background:#1a382c;}
+  .recent-item .num{font-family:var(--font-mono);font-size:11px;color:#E4C79A;letter-spacing:1px;margin-bottom:14px;display:block;}
+  .recent-item h4{font-family:var(--font-display);font-size:18px;font-weight:500;margin-bottom:8px;line-height:1.3;}
+  .recent-item p{font-size:12.5px;color:#B7C6BE;}
+
+  /* GALLERY */
+  .gallery-grid{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:110px;gap:10px;}
+  .g-item{border-radius:3px;overflow:hidden;position:relative;}
+  .g-item svg{width:100%;height:100%;}
+  .g1{grid-column:span 2;grid-row:span 2;}
+  .g2{grid-column:span 2;grid-row:span 1;}
+  .g3{grid-column:span 2;grid-row:span 1;}
+  .g4{grid-column:span 2;grid-row:span 1;}
+  .g5{grid-column:span 2;grid-row:span 1;}
+  .g6{grid-column:span 2;grid-row:span 2;}
+  .g-label{
+    position:absolute;bottom:10px;left:12px;font-family:var(--font-mono);font-size:10.5px;
+    color:#fff;text-transform:uppercase;letter-spacing:1px;text-shadow:0 1px 4px rgba(0,0,0,0.4);
+  }
+
+  /* NEWSLETTER */
+  .newsletter{
+    background:var(--clay);
+    border-radius:4px;
+    padding:64px 56px;
+    display:flex;align-items:center;justify-content:space-between;gap:40px;
+    flex-wrap:wrap;
+  }
+  .newsletter h3{font-family:var(--font-display);font-weight:500;font-size:32px;color:var(--ridge-white);max-width:420px;line-height:1.2;}
+  .newsletter p{color:#FBEBDA;font-size:14px;margin-top:10px;max-width:380px;}
+  .newsletter-form{display:flex;gap:0;flex:1;min-width:280px;max-width:420px;}
+  .newsletter-form input{
+    flex:1;border:none;padding:15px 18px;font-family:var(--font-body);font-size:14px;
+    background:var(--ridge-white);color:var(--ink);border-radius:2px 0 0 2px;
+  }
+  .newsletter-form input:focus{outline:2px solid var(--pine-deep);outline-offset:-2px;}
+  .newsletter-form button{
+    font-family:var(--font-mono);font-size:12px;letter-spacing:0.5px;
+    background:var(--pine-deep);color:var(--ridge-white);border:none;padding:0 24px;
+    border-radius:0 2px 2px 0;cursor:pointer;transition:background 0.2s;
+  }
+  .newsletter-form button:hover{background:#0d1e18;}
+
+  /* FOOTER */
+  footer{background:var(--pine-deep);color:#B7C6BE;padding:72px 0 28px;}
+  .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:56px;}
+  .footer-logo{font-family:var(--font-display);font-weight:600;font-size:22px;color:var(--ridge-white);margin-bottom:14px;}
+  .footer-logo span{color:var(--clay);}
+  .footer-grid p{font-size:13.5px;line-height:1.7;max-width:280px;}
+  .footer-col h5{font-family:var(--font-mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#E4C79A;margin-bottom:18px;}
+  .footer-col a{display:block;font-size:13.5px;margin-bottom:11px;color:#CFE0D6;opacity:0.85;}
+  .footer-col a:hover{opacity:1;}
+  .footer-social{display:flex;gap:14px;margin-top:6px;}
+  .footer-social a{
+    width:34px;height:34px;border:1px solid rgba(255,255,255,0.2);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:13px;
+  }
+  .footer-bottom{
+    border-top:1px solid rgba(255,255,255,0.12);padding-top:24px;
+    display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:11.5px;
+    color:#8CA096;flex-wrap:wrap;gap:10px;
+  }
+
+  @media (max-width:920px){
+    .nav-links{display:none;}
+    .post-grid{grid-template-columns:1fr;}
+    .post-card:first-child{grid-row:auto;}
+    .recent-row{grid-template-columns:1fr 1fr;}
+    .gallery-grid{grid-template-columns:repeat(3,1fr);}
+    .g1,.g6{grid-column:span 3;}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+    .newsletter{padding:44px 28px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="navbar">
+    <div class="logo">The Himalayan <span>Guy</span></div>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Blog</a>
+      <a href="#">Gallery</a>
+      <a href="#">Contact</a>
+    </div>
+    <a href="#" class="nav-cta">Subscribe</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <svg class="hero-ridges" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="0,800 0,520 180,380 340,470 520,300 680,420 860,260 1040,410 1220,300 1440,440 1440,800" fill="#284d3f"/>
+    <polygon points="0,800 0,610 220,480 400,560 600,410 780,530 980,380 1180,510 1440,430 1440,800" fill="#1e3d31"/>
+    <polygon points="0,800 0,700 260,610 480,680 720,590 940,660 1160,600 1440,650 1440,800" fill="#152e25"/>
+    <g opacity="0.5" stroke="#E4C79A" stroke-width="1.4" fill="none">
+      <path d="M20 500 Q 200 460 380 480 T 700 430"/>
+      <path d="M50 560 Q 240 520 420 545 T 760 500"/>
+    </g>
+  </svg>
+  <div class="hero-vignette"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Field notes from the Nepal Himalaya</div>
+    <h1>Exploring Nepal,<br><em>one trail</em> at a time.</h1>
+    <p class="hero-tagline">Trekking journals, village stories, and mountain photography from someone who keeps going back for the switchbacks.</p>
+  </div>
+  <div class="hero-scroll">SCROLL</div>
+</section>
+
+<section class="wrap">
+  <div class="section-head">
+    <div>
+      <div class="section-eyebrow">Featured Stories</div>
+      <h2>Where the trail led this season</h2>
+    </div>
+    <a href="#" class="section-link">View all posts →</a>
+  </div>
+
+  <div class="post-grid">
+    <div class="post-card">
+      <div class="post-media">
+        <svg viewBox="0 0 500 620" xmlns="http://www.w3.org/2000/svg">
+          <rect width="500" height="620" fill="#3a6b7a"/>
+          <polygon points="0,620 0,380 90,300 190,360 300,220 400,330 500,260 500,620" fill="#2c5462"/>
+          <polygon points="0,620 0,470 140,400 260,450 380,370 500,430 500,620" fill="#1f3f4a"/>
+        </svg>
+        <div class="altitude-tag">5,364m · Gokyo Ri</div>
+      </div>
+      <div class="post-cat">Trekking</div>
+      <h3>Sunrise at Gokyo Ri: eight hours for eight minutes of light</h3>
+      <p class="post-excerpt">A pre-dawn climb above the turquoise lakes, and why every trekker in the Khumbu says it's worth the cold.</p>
+      <div class="post-meta"><span>12 MIN READ</span><span>JUN 18, 2026</span></div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-media">
+        <svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg">
+          <rect width="500" height="340" fill="#4c7d93"/>
+          <polygon points="0,340 0,220 120,160 240,210 360,120 500,200 500,340" fill="#3a6472"/>
+        </svg>
+        <div class="altitude-tag">3,210m · Poon Hill</div>
+      </div>
+      <div class="post-cat">Trekking</div>
+      <h3>Poon Hill without the crowds</h3>
+      <p class="post-excerpt">A quieter route to the same rhododendron-lined viewpoint.</p>
+      <div class="post-meta"><span>7 MIN READ</span><span>JUN 04, 2026</span></div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-media">
+        <svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg">
+          <rect width="500" height="340" fill="#8a6a4a"/>
+          <polygon points="0,340 0,250 500,250 500,340" fill="#6e5238"/>
+          <rect x="60" y="180" width="70" height="70" fill="#5a4530"/>
+          <rect x="180" y="160" width="60" height="90" fill="#5a4530"/>
+        </svg>
+        <div class="altitude-tag">2,860m · Upper Mustang</div>
+      </div>
+      <div class="post-cat">Culture</div>
+      <h3>The last kingdom: three days in Upper Mustang</h3>
+      <p class="post-excerpt">Cave monasteries, wind-scoured cliffs, and a village that time forgot.</p>
+      <div class="post-meta"><span>15 MIN READ</span><span>MAY 22, 2026</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="recent-strip">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Recent Adventures</div>
+        <h2>Latest from the trail journal</h2>
+      </div>
+      <a href="#" class="section-link">View archive →</a>
+    </div>
+    <div class="recent-row">
+      <div class="recent-item"><span class="num">JUN 26</span><h4>Crossing Thorong La at 5,416m</h4><p>Annapurna Circuit, day 9</p></div>
+      <div class="recent-item"><span class="num">JUN 14</span><h4>A night in a Sherpa teahouse</h4><p>Namche Bazaar</p></div>
+      <div class="recent-item"><span class="num">JUN 02</span><h4>Packing list for the monsoon trails</h4><p>Gear guide</p></div>
+      <div class="recent-item"><span class="num">MAY 27</span><h4>Langtang, one year after</h4><p>Community & rebuilding</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="section-head">
+    <div>
+      <div class="section-eyebrow">Gallery</div>
+      <h2>Nepal in frames</h2>
+    </div>
+    <a href="#" class="section-link">Full gallery →</a>
+  </div>
+  <div class="gallery-grid">
+    <div class="g-item g1"><svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"><rect width="300" height="300" fill="#4c7d93"/><polygon points="0,300 0,190 90,120 180,180 300,90 300,300" fill="#345c6b"/></svg><span class="g-label">Mountains</span></div>
+    <div class="g-item g2"><svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg"><rect width="300" height="140" fill="#2f6b6a"/><ellipse cx="150" cy="110" rx="160" ry="30" fill="#1f4a49"/></svg><span class="g-label">Lakes</span></div>
+    <div class="g-item g3"><svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg"><rect width="300" height="140" fill="#5a7a4a"/><polygon points="0,140 0,80 150,40 300,90 300,140" fill="#3f5c32"/></svg><span class="g-label">Trekking</span></div>
+    <div class="g-item g4"><svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg"><rect width="300" height="140" fill="#8a6a4a"/><rect x="40" y="60" width="220" height="80" fill="#6e5238"/></svg><span class="g-label">Villages</span></div>
+    <div class="g-item g5"><svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg"><rect width="300" height="140" fill="#3e4a34"/><circle cx="150" cy="70" r="26" fill="#6e5238"/></svg><span class="g-label">Wildlife</span></div>
+    <div class="g-item g6"><svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"><rect width="300" height="300" fill="#A23E3F"/><rect x="0" y="0" width="300" height="40" fill="#C07F4E"/><rect x="0" y="260" width="300" height="40" fill="#1C3A2E"/></svg><span class="g-label">Culture</span></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="newsletter">
+    <div>
+      <h3>Trail notes, straight to your inbox.</h3>
+      <p>New posts, route notes, and the occasional gear recommendation. No spam, unsubscribe anytime.</p>
+    </div>
+    <form class="newsletter-form">
+      <input type="email" placeholder="you@example.com" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">The Himalayan <span>Guy</span></div>
+        <p>A personal travel blog documenting treks, villages, and the everyday life of the Nepal Himalaya — one trail at a time.</p>
+        <div class="footer-social">
+          <a href="#">f</a><a href="#">ig</a><a href="#">yt</a><a href="#">tt</a><a href="#">x</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <a href="#">Home</a><a href="#">About Me</a><a href="#">Blog</a><a href="#">Gallery</a><a href="#">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h5>Categories</h5>
+        <a href="#">Trekking</a><a href="#">Villages</a><a href="#">Wildlife</a><a href="#">Culture</a>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <a href="#">hello@thehimalayanguy.com</a>
+        <a href="#">Kathmandu, Nepal</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 The Himalayan Guy. All Rights Reserved.</span>
+      <span><a href="admin.html" style="color:#8CA096;text-decoration:underline;">Admin login</a> · Built with Next.js · Powered by trekking poles</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

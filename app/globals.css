@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+body { background: #F6F3EC; color: #211F1A; }
+
+/* Rich-text post content styling */
+.prose-himalaya h2 { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 600; color: #122720; margin: 2rem 0 1rem; }
+.prose-himalaya h3 { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600; color: #122720; margin: 1.5rem 0 0.75rem; }
+.prose-himalaya p { margin-bottom: 1.1rem; line-height: 1.75; }
+.prose-himalaya img { border-radius: 4px; margin: 1.5rem 0; }
+.prose-himalaya a { color: #4C7D93; text-decoration: underline; }
+.prose-himalaya blockquote { border-left: 3px solid #C07F4E; padding-left: 1rem; font-style: italic; color: #4B4A42; margin: 1.5rem 0; }
+.prose-himalaya ul, .prose-himalaya ol { margin: 1rem 0 1rem 1.5rem; }
+.prose-himalaya iframe { width: 100%; aspect-ratio: 16/9; border-radius: 4px; margin: 1.5rem 0; }
